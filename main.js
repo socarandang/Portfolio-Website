@@ -37,3 +37,45 @@ window.onscroll = () => {
   menuIcon.classList.remove("fa-xmark");
   navbar.classList.remove("active");
 };
+
+/*=================== CONTACT FORM =================*/
+document.getElementById("contact-form").addEventListerner("submit", (event) => {
+  const contactForm = event.target;
+  if (!validateContactForm(contactForm)) {
+    event.preventDefault();
+    displayError(contactForm, "Invalid Input");
+  }
+});
+
+function isValidEmail(email) {
+  const emailRegex =
+    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  return emailRegex.test(email);
+}
+
+function isValidPhoneNumber(phone) {
+  const phoneRegex = /^\d{10}$/;
+  return phoneRegex.test(phone);
+}
+
+function validateContactForm(contactForm) {
+  const name = contactForm["name"].value;
+  const email = contactForm["email"].value;
+  const phone = contactForm["phone"].value;
+  const message = contactForm["message"].value;
+
+  if (!name || !email || !message) {
+    return false;
+  }
+
+  if (!isValidEmail(email) || (phone && !isValidPhoneNumber(phone))) {
+    return false;
+  }
+  return true;
+}
+
+function displayError(formElement, message) {
+  const errorElement = formElement.getElementByClassName("form-error")[0];
+  errorElement.innerHTML = message;
+  errorElement.style.display = "block";
+}
